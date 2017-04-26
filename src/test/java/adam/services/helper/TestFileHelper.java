@@ -6,8 +6,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static org.junit.Assert.fail;
-
 public class TestFileHelper {
     public static File getTestFile(String fileName) throws URISyntaxException, FileNotFoundException {
         URL resource = getTestFileUrl(fileName);
@@ -17,7 +15,7 @@ public class TestFileHelper {
         return new File(new URI(resource.toString()));
     }
 
-    public static URL getTestFileUrl(String fileName) {
+    private static URL getTestFileUrl(String fileName) {
         TestFileHelper test = new TestFileHelper();
         return test.getClass().getClassLoader().getResource(fileName);
     }

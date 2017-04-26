@@ -8,7 +8,6 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.containsString;
@@ -40,7 +39,7 @@ public class PhoneNumberServiceImplTest {
 
     @Test
     public void testConvertAndPrintLines() throws Exception {
-        Stream<String> stream = Arrays.asList("5624-82", "10/783--5").stream();
+        Stream<String> stream = Stream.of("5624-82", "10/783--5");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(os);
         System.setOut(printStream);

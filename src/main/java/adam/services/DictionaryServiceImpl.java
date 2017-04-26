@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
@@ -25,12 +26,13 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     static Map<String, Object> createDictionaryMapNumberToWord(Stream<String> lines) {
-        return lines.filter(l -> l != null).map(String::trim).collect(new MapValueListCollector(DictionaryServiceImpl::encodeWordToNumber));
+        return lines.filter(Objects::nonNull).map(String::trim).collect(new MapValueListCollector(DictionaryServiceImpl::encodeWordToNumber));
     }
 
     static String encodeWordToNumber(String str) {
-        List<Character> chList = str.toLowerCase().chars().mapToObj(c -> TranslationMap.TRANSLATION_MAP.get((char) c)).collect(toList());
-        return chList.stream().filter(c -> c != null).map(String::valueOf).collect(joining());
+        Map<Character, Character> translationMap = TranslationMap.getTranslationMap();
+        List<Character> chList = str.toLowerCase().chars().mapToObj(c -> translationMap.get((char) c)).collect(toList());
+        return chList.stream().filter(Objects::nonNull).map(String::valueOf).collect(joining());
     }
 
 }

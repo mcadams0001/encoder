@@ -14,18 +14,17 @@ import static java.util.stream.Collectors.toList;
  */
 public class EncodingServiceImpl implements EncodingService {
 
-    public static final int MAX_WORD_LENGTH = 2;
+    private static final int MAX_WORD_LENGTH = 2;
     private Map<String, Object> dictionaryMap;
 
-    public EncodingServiceImpl(Map<String, Object> dictionaryMap) {
+    EncodingServiceImpl(Map<String, Object> dictionaryMap) {
         this.dictionaryMap = dictionaryMap;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public List<String> encodeNumber(String phoneNumber) {
         if (phoneNumber.length() < MAX_WORD_LENGTH) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         TreeNode treeNode = new TreeNode("", phoneNumber);
         createTreeWithEncodedNodes(treeNode);

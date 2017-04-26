@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -31,7 +32,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
      * @param printStream print stream where the information is going to be printed.
      */
     void convertAndPrintLines(Stream<String> lineStream, PrintStream printStream) {
-        lineStream.filter(l -> l != null).forEach(l -> printPhoneNumbers(l, printStream));
+        lineStream.filter(Objects::nonNull).forEach(l -> printPhoneNumbers(l, printStream));
     }
 
     /**
@@ -41,7 +42,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
      */
     void printPhoneNumbers(String phoneNumber, PrintStream printStream) {
         List<String> encodedNumberList = encodingService.encodeNumber(removeSpecialCharacters(phoneNumber));
-        encodedNumberList.stream().forEach(encodedNumber -> printStream.println(phoneNumber + ": " + encodedNumber.trim()));
+        encodedNumberList.forEach(encodedNumber -> printStream.println(phoneNumber + ": " + encodedNumber.trim()));
     }
 
     /**

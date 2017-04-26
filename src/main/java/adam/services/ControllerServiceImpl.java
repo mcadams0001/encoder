@@ -1,5 +1,7 @@
 package adam.services;
 
+import adam.helper.MyLogger;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -12,16 +14,14 @@ public class ControllerServiceImpl implements ControllerService {
         try {
             dictionaryMap = dictionaryService.readAndCreateMap(dictionaryFileName);
         } catch (IOException e) {
-            System.err.println("Failed to process dictionary file: " + dictionaryFileName + " with error message: " + e.getMessage());
-            e.printStackTrace();
+            MyLogger.error("Failed to process dictionary file: " + dictionaryFileName + " with error message: " + e.getMessage(), e);
             return false;
         }
         PhoneNumberService phoneNumberService = new PhoneNumberServiceImpl(dictionaryMap);
         try {
             phoneNumberService.readAndEncodePhoneNumbers(phoneNumbersFileName);
         } catch (IOException e) {
-            System.err.println("Failed to process phone numbers file: " + phoneNumbersFileName + " with error message: " + e.getMessage());
-            e.printStackTrace();
+            MyLogger.error("Failed to process phone numbers file: " + phoneNumbersFileName + " with error message: " + e.getMessage(), e);
             return false;
         }
         return true;

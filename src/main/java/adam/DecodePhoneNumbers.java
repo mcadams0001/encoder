@@ -1,14 +1,18 @@
 package adam;
 
+import adam.helper.MyLogger;
 import adam.services.ControllerService;
 import adam.services.ControllerServiceImpl;
 
 import static adam.helper.FileHelper.isCorrectFile;
 
 public class DecodePhoneNumbers {
+    private DecodePhoneNumbers() {
+        //Do nothing
+    }
     public static void main(String[] args) {
         if (args.length < 2) {
-            printUsageMessage();
+            MyLogger.info("Usage: [dictionary file name] [phone numbers file name]");
             return;
         }
         String dictionaryFileName = args[0];
@@ -19,10 +23,4 @@ public class DecodePhoneNumbers {
         ControllerService controllerService = new ControllerServiceImpl();
         controllerService.decodeAndPrintPhoneNumbers(dictionaryFileName, phoneNumberFileName);
     }
-
-    private static void printUsageMessage() {
-        System.out.println("Usage: [dictionary file name] [phone numbers file name]");
-    }
-
-
 }

@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 
 public class ControllerServiceImplTest {
 
-    ControllerService controllerService = new ControllerServiceImpl();
+    private ControllerService controllerService = new ControllerServiceImpl();
 
     @Test
     public void testDecodeAndPrintPhoneNumbers() throws Exception {

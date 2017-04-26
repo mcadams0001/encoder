@@ -1,5 +1,6 @@
 package adam.constants;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +12,11 @@ import java.util.Map;
  * e | j n q | r w x | d s y | f t | a m | c i v | b k u | l o p | g h z
  * 0 |   1   |   2   |   3   |  4  |  5  |   6   |   7   |   8   |   9
  */
-public class TranslationMap {
-    public static final Map<Character, Character> TRANSLATION_MAP = new HashMap<>();
+public final class TranslationMap {
+    private TranslationMap() {
+        //Do nothing
+    }
+    private static final Map<Character, Character> TRANSLATION_MAP = new HashMap<>();
 
 
     static {
@@ -42,5 +46,9 @@ public class TranslationMap {
         TRANSLATION_MAP.put('x', '2');
         TRANSLATION_MAP.put('y', '3');
         TRANSLATION_MAP.put('z', '9');
+    }
+
+    public static Map<Character, Character> getTranslationMap() {
+        return Collections.unmodifiableMap(TRANSLATION_MAP);
     }
 }

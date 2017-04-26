@@ -30,10 +30,10 @@ public class TreeNode {
     }
 
     public boolean isLeaf() {
-        return nodes.size() == 0;
+        return nodes.isEmpty();
     }
 
     public boolean hasLeafs() {
-        return nodes.size() > 0;
+        return !nodes.isEmpty();
     }
 }
