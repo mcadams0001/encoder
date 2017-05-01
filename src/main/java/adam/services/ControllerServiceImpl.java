@@ -8,10 +8,12 @@ import java.util.Map;
 public class ControllerServiceImpl implements ControllerService {
 
     private DictionaryService dictionaryService;
+    private MyLogger myLogger;
 
     public ControllerServiceImpl(DictionaryService dictionaryService) {
 
         this.dictionaryService = dictionaryService;
+        this.myLogger = new MyLogger();
     }
 
     @Override
@@ -25,7 +27,7 @@ public class ControllerServiceImpl implements ControllerService {
         try {
             phoneNumberService.readAndEncodePhoneNumbers(phoneNumbersFileName);
         } catch (IOException e) {
-            MyLogger.error("Failed to process phone numbers file: " + phoneNumbersFileName + " with error message: " + e.getMessage(), e);
+            myLogger.error("Failed to process phone numbers file: " + phoneNumbersFileName + " with error message: " + e.getMessage(), e);
             return false;
         }
         return true;
@@ -39,7 +41,7 @@ public class ControllerServiceImpl implements ControllerService {
         try {
             return dictionaryService.readAndCreateMap(dictionaryFileName);
         } catch (IOException e) {
-            MyLogger.error("Failed to process dictionary file: " + dictionaryFileName + " with error message: " + e.getMessage(), e);
+            myLogger.error("Failed to process dictionary file: " + dictionaryFileName + " with error message: " + e.getMessage(), e);
         }
         return null;
     }

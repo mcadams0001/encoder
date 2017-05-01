@@ -5,29 +5,34 @@ import java.io.File;
 /**
  * Helper class for file operations.
  */
-public final class FileHelper {
+public class FileHelper {
     private static final String FILE_NOT_EXISTS = "The given file: %s doesn't exist";
     private static final String IS_NOT_A_FILE = "The given file: %s is not a file";
     private static final String CANT_READ = "The given file: %s cannot be read";
+    private MyLogger myLogger;
 
-    private FileHelper() {
-        //Do nothing.
+    public FileHelper(MyLogger myLogger) {
+        this.myLogger = myLogger;
     }
 
-    public static boolean isCorrectFile(String fileName) {
-        File file = new File(fileName);
+    public boolean isCorrectFile(String fileName) {
+        File file = getFile(fileName);
         if (!file.exists()) {
-            MyLogger.error(String.format(FILE_NOT_EXISTS, fileName));
+            myLogger.error(String.format(FILE_NOT_EXISTS, fileName));
             return false;
         }
         if (!file.isFile()) {
-            MyLogger.error(String.format(IS_NOT_A_FILE, fileName));
+            myLogger.error(String.format(IS_NOT_A_FILE, fileName));
             return false;
         }
         if (!file.canRead()) {
-            MyLogger.error(String.format(CANT_READ, fileName));
+            myLogger.error(String.format(CANT_READ, fileName));
             return false;
         }
         return true;
+    }
+
+    File getFile(String fileName) {
+        return new File(fileName);
     }
 }
