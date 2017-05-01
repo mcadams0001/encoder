@@ -7,17 +7,21 @@ import java.util.Map;
 
 public class ControllerServiceImpl implements ControllerService {
 
+    private DictionaryService dictionaryService;
+
+    public ControllerServiceImpl(DictionaryService dictionaryService) {
+
+        this.dictionaryService = dictionaryService;
+    }
+
     @Override
     public boolean decodeAndPrintPhoneNumbers(String dictionaryFileName, String phoneNumbersFileName) {
-        Map<String, Object> dictionaryMap;
-        DictionaryService dictionaryService = new DictionaryServiceImpl();
-        try {
-            dictionaryMap = dictionaryService.readAndCreateMap(dictionaryFileName);
-        } catch (IOException e) {
-            MyLogger.error("Failed to process dictionary file: " + dictionaryFileName + " with error message: " + e.getMessage(), e);
-            return false;
-        }
-        PhoneNumberService phoneNumberService = new PhoneNumberServiceImpl(dictionaryMap);
+        Map<String, Object> dictionaryMap = getDirectoryMap(dictionaryFileName);
+        return dictionaryMap != null && encodePhoneNumbersUsingDictionary(phoneNumbersFileName, dictionaryMap);
+    }
+
+    boolean encodePhoneNumbersUsingDictionary(String phoneNumbersFileName, Map<String, Object> dictionaryMap) {
+        PhoneNumberService phoneNumberService = getPhoneNumberService(dictionaryMap);
         try {
             phoneNumberService.readAndEncodePhoneNumbers(phoneNumbersFileName);
         } catch (IOException e) {
@@ -25,5 +29,18 @@ public class ControllerServiceImpl implements ControllerService {
             return false;
         }
         return true;
+    }
+
+    PhoneNumberService getPhoneNumberService(Map<String, Object> dictionaryMap) {
+        return new PhoneNumberServiceImpl(new EncodingServiceImpl(dictionaryMap));
+    }
+
+    Map<String, Object> getDirectoryMap(String dictionaryFileName) {
+        try {
+            return dictionaryService.readAndCreateMap(dictionaryFileName);
+        } catch (IOException e) {
+            MyLogger.error("Failed to process dictionary file: " + dictionaryFileName + " with error message: " + e.getMessage(), e);
+        }
+        return null;
     }
 }

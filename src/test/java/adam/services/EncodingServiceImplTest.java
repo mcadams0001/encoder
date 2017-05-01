@@ -41,6 +41,12 @@ public class EncodingServiceImplTest {
     }
 
     @Test
+    public void shouldNotEncodeNumberWithLessDigits() throws Exception {
+        List<String> actual = service.encodeNumber("");
+        assertThat(actual.isEmpty(), equalTo(true));
+    }
+
+    @Test
     public void testFindLeaves() throws Exception {
         TreeNode treeNode = new TreeNode("MimeBea8beu", "");
         TreeNode treeNode2 = new TreeNode("MimeBea", "8706");

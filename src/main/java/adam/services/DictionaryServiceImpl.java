@@ -29,7 +29,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         return lines.filter(Objects::nonNull).map(String::trim).collect(new MapValueListCollector(DictionaryServiceImpl::encodeWordToNumber));
     }
 
-    static String encodeWordToNumber(String str) {
+    public static String encodeWordToNumber(String str) {
         Map<Character, Character> translationMap = TranslationMap.getTranslationMap();
         List<Character> chList = str.toLowerCase().chars().mapToObj(c -> translationMap.get((char) c)).collect(toList());
         return chList.stream().filter(Objects::nonNull).map(String::valueOf).collect(joining());

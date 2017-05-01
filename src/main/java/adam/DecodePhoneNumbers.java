@@ -3,6 +3,8 @@ package adam;
 import adam.helper.MyLogger;
 import adam.services.ControllerService;
 import adam.services.ControllerServiceImpl;
+import adam.services.DictionaryService;
+import adam.services.DictionaryServiceImpl;
 
 import static adam.helper.FileHelper.isCorrectFile;
 
@@ -20,7 +22,8 @@ public class DecodePhoneNumbers {
         if(!isCorrectFile(dictionaryFileName) || !isCorrectFile(phoneNumberFileName)) {
             return;
         }
-        ControllerService controllerService = new ControllerServiceImpl();
+        DictionaryService dictionaryService = new DictionaryServiceImpl();
+        ControllerService controllerService = new ControllerServiceImpl(dictionaryService);
         controllerService.decodeAndPrintPhoneNumbers(dictionaryFileName, phoneNumberFileName);
     }
 }

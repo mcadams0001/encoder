@@ -5,14 +5,15 @@ import adam.services.helper.TestFileHelper;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.spy;
 
 public class PhoneNumberServiceImplTest {
 
@@ -20,7 +21,7 @@ public class PhoneNumberServiceImplTest {
 
     @Before
     public void setup() throws Exception {
-        service = new PhoneNumberServiceImpl(DictionaryFixture.DICTIONARY_MAP);
+        service = new PhoneNumberServiceImpl(new EncodingServiceImpl(DictionaryFixture.DICTIONARY_MAP));
     }
 
     @Test
@@ -63,5 +64,12 @@ public class PhoneNumberServiceImplTest {
     @Test
     public void testConvertString() throws Exception {
         assertThat(PhoneNumberServiceImpl.removeSpecialCharacters("10/783--5"), equalTo("107835"));
+    }
+
+    @Test(expected = IOException.class)
+    public void rethrowIOException() throws Exception {
+        PhoneNumberServiceImpl spyService = spy(service);
+        doThrow(new FileNotFoundException("failure")).when(spyService).getBufferedReader(anyString());
+        spyService.readAndEncodePhoneNumbers("someFile");
     }
 }

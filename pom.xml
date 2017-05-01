@@ -12,6 +12,7 @@
         <sonar.host.url>https://sonarqube.com</sonar.host.url>
         <sonar.organization>mcadams0001-github</sonar.organization>
         <sonar.jacoco.reportPaths>${basedir}/target/jacoco.exec</sonar.jacoco.reportPaths>
+        <sonar.exclusions>**/TranslationMap*;**/MyLogger*</sonar.exclusions>
     </properties>
 
     <build>
