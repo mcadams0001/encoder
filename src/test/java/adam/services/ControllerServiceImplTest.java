@@ -62,6 +62,12 @@ public class ControllerServiceImplTest {
         assertThat(result, equalTo(false));
     }
 
+    @Test
+    public void testReturnFalseOnEmptyDictionary() throws Exception {
+        ControllerServiceImpl service = new ControllerServiceImpl(mockDictionaryService, mockLogger);
+        boolean result = service.decodeAndPrintPhoneNumbers("dictFile", "numFile");
+        assertThat(result, equalTo(false));
+    }
 
     @Test
     public void captureDirectoryMapExceptionAndReturnNull() throws Exception {

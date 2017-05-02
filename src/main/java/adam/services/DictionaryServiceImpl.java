@@ -4,6 +4,7 @@ import adam.constants.TranslationMap;
 import adam.helper.MapValueListCollector;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
@@ -20,12 +21,16 @@ import static java.util.stream.Collectors.toList;
 public class DictionaryServiceImpl implements DictionaryService {
 
     public Map<String,  Object> readAndCreateMap(String fileName) throws IOException {
-        try (BufferedReader buf = new BufferedReader(new FileReader(fileName))) {
+        try (BufferedReader buf = getBufferedReader(fileName)) {
             return createDictionaryMapNumberToWord(buf.lines());
         }
     }
 
-    static Map<String, Object> createDictionaryMapNumberToWord(Stream<String> lines) {
+    BufferedReader getBufferedReader(String fileName) throws FileNotFoundException {
+        return new BufferedReader(new FileReader(fileName));
+    }
+
+    Map<String, Object> createDictionaryMapNumberToWord(Stream<String> lines) {
         return lines.filter(Objects::nonNull).map(String::trim).collect(new MapValueListCollector(DictionaryServiceImpl::encodeWordToNumber));
     }
 

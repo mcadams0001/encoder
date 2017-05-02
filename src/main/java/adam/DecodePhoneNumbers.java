@@ -37,6 +37,6 @@ public class DecodePhoneNumbers {
     }
 
     boolean invalidFiles(String dictionaryFileName, String phoneNumberFileName) {
-        return (!fileHelper.isCorrectFile(dictionaryFileName) || !fileHelper.isCorrectFile(phoneNumberFileName));
+        return !fileHelper.isCorrectFile(dictionaryFileName) || !fileHelper.isCorrectFile(phoneNumberFileName);
     }
 }
