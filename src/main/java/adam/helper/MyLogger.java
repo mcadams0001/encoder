@@ -1,16 +1,31 @@
 package adam.helper;
 
+import java.io.PrintStream;
+
 public class MyLogger {
+
+    private PrintStream infoPrintStream = System.out;
+    private PrintStream errorPrintStream = System.err;
+
+    public MyLogger() {
+    }
+
+    public MyLogger(PrintStream infoPrintStream, PrintStream errorPrintStream) {
+        this.infoPrintStream = infoPrintStream;
+        this.errorPrintStream = errorPrintStream;
+    }
+
     public void info(String message) {
-        System.out.println(message);
+
+        infoPrintStream.println(message);
     }
 
     public void error(String message) {
-        System.err.println(message);
+        errorPrintStream.println(message);
     }
 
     public void error(String message, Exception ex) {
-        System.err.println(message);
-        ex.printStackTrace(System.err);
+        errorPrintStream.println(message);
+        ex.printStackTrace(errorPrintStream);
     }
 }

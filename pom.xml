@@ -12,7 +12,7 @@
         <sonar.host.url>https://sonarqube.com</sonar.host.url>
         <sonar.organization>mcadams0001-github</sonar.organization>
         <sonar.jacoco.reportPaths>${basedir}/target/jacoco.exec</sonar.jacoco.reportPaths>
-        <sonar.exclusions>**/TranslationMap*,**/MyLogger*</sonar.exclusions>
+        <sonar.exclusions>**/constants/**,**/MyLogger*</sonar.exclusions>
     </properties>
 
     <build>
@@ -51,12 +51,6 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.9</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/dto/**</exclude>
-                        <exclude>**/constants/**</exclude>
-                    </excludes>
-                </configuration>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
