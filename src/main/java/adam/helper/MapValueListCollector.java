@@ -18,7 +18,7 @@ public class MapValueListCollector implements Collector<String, Map<String, Obje
 
     @Override
     public Supplier<Map<String, Object>> supplier() {
-        return HashMap::new;
+        return LinkedHashMap::new;
     }
 
     @Override

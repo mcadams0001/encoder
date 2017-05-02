@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.*;
 
 public class TreeNodeTest {
+
     @Test
     public void createTreeNode() throws Exception {
         TreeNode node = new TreeNode(" test ", "ing");

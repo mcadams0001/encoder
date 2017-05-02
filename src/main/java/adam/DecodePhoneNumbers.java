@@ -4,13 +4,18 @@ import adam.helper.FileHelper;
 import adam.helper.MyLogger;
 import adam.services.ControllerService;
 import adam.services.ControllerServiceImpl;
-import adam.services.DictionaryService;
 import adam.services.DictionaryServiceImpl;
 
 public class DecodePhoneNumbers {
-    private DecodePhoneNumbers() {
-        //Do nothing
+
+    private ControllerService controllerService;
+    private FileHelper fileHelper;
+
+    public DecodePhoneNumbers(FileHelper fileHelper, ControllerService controllerService) {
+        this.fileHelper = fileHelper;
+        this.controllerService = controllerService;
     }
+
     public static void main(String[] args) {
         MyLogger myLogger = new MyLogger();
         if (args.length < 2) {
@@ -19,12 +24,19 @@ public class DecodePhoneNumbers {
         }
         String dictionaryFileName = args[0];
         String phoneNumberFileName = args[1];
-        FileHelper fileHelper = new FileHelper(myLogger);
-        if(!fileHelper.isCorrectFile(dictionaryFileName) || !fileHelper.isCorrectFile(phoneNumberFileName)) {
+        DecodePhoneNumbers decodePhoneNumbers = new DecodePhoneNumbers(new FileHelper(myLogger), new ControllerServiceImpl(new DictionaryServiceImpl(), myLogger));
+        decodePhoneNumbers.processFiles(dictionaryFileName, phoneNumberFileName);
+    }
+
+    void processFiles(String dictionaryFileName, String phoneNumberFileName) {
+        if (invalidFiles(dictionaryFileName, phoneNumberFileName)) {
             return;
         }
-        DictionaryService dictionaryService = new DictionaryServiceImpl();
-        ControllerService controllerService = new ControllerServiceImpl(dictionaryService);
         controllerService.decodeAndPrintPhoneNumbers(dictionaryFileName, phoneNumberFileName);
+
+    }
+
+    boolean invalidFiles(String dictionaryFileName, String phoneNumberFileName) {
+        return (!fileHelper.isCorrectFile(dictionaryFileName) || !fileHelper.isCorrectFile(phoneNumberFileName));
     }
 }

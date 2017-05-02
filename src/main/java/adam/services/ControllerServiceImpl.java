@@ -10,10 +10,9 @@ public class ControllerServiceImpl implements ControllerService {
     private DictionaryService dictionaryService;
     private MyLogger myLogger;
 
-    public ControllerServiceImpl(DictionaryService dictionaryService) {
-
+    public ControllerServiceImpl(DictionaryService dictionaryService, MyLogger myLogger) {
         this.dictionaryService = dictionaryService;
-        this.myLogger = new MyLogger();
+        this.myLogger = myLogger;
     }
 
     @Override
