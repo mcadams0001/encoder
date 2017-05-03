@@ -2,20 +2,29 @@ package adam.services;
 
 import adam.services.helper.TestFileHelper;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
+
+@RunWith(MockitoJUnitRunner.class)
 public class DictionaryServiceImplTest {
     private DictionaryServiceImpl service = new DictionaryServiceImpl();
+
+    @Mock
+    private BufferedReader mockBufferedReader;
+
+    @Mock
+    private Stream<String> mockStream;
 
     @Test
     public void shouldCreateDictionaryFile() throws Exception {
@@ -39,6 +48,20 @@ public class DictionaryServiceImplTest {
         DictionaryServiceImpl spyService = spy(service);
         doThrow(new FileNotFoundException()).when(spyService).getBufferedReader(anyString());
         spyService.readAndCreateMap("test.txt");
+    }
+
+    @Test(expected = IOException.class)
+    public void shouldReturnNullResource() throws Exception {
+        service.readAndCreateMap("");
+    }
+
+    @Test(expected = UncheckedIOException.class)
+    public void shouldReturnNull() throws Exception {
+        DictionaryServiceImpl spyService = spy(service);
+        doReturn(mockBufferedReader).when(spyService).getBufferedReader(anyString());
+        when(mockBufferedReader.lines()).thenReturn(mockStream);
+        doThrow(new UncheckedIOException("failure", new IOException())).when(spyService).createDictionaryMapNumberToWord(mockStream);
+        spyService.readAndCreateMap("test");
     }
 
 }

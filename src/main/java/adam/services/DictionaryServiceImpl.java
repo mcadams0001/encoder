@@ -27,7 +27,8 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     BufferedReader getBufferedReader(String fileName) throws FileNotFoundException {
-        return new BufferedReader(new FileReader(fileName));
+        FileReader reader = new FileReader(fileName);
+        return new BufferedReader(reader);
     }
 
     Map<String, Object> createDictionaryMapNumberToWord(Stream<String> lines) {
