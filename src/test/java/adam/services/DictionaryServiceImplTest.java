@@ -43,7 +43,7 @@ public class DictionaryServiceImplTest {
         assertThat(encodedNumber, equalTo("556901"));
     }
 
-    @Test(expected = IOException.class)
+    @Test(expected = FileNotFoundException.class)
     public void throwFileNotFoundException() throws Exception {
         DictionaryServiceImpl spyService = spy(service);
         doThrow(new FileNotFoundException()).when(spyService).getBufferedReader(anyString());
@@ -64,4 +64,12 @@ public class DictionaryServiceImplTest {
         spyService.readAndCreateMap("test");
     }
 
+    @Test(expected = IOException.class)
+    public void name() throws Exception {
+        DictionaryServiceImpl spyService = spy(service);
+        doReturn(mockBufferedReader).when(spyService).getBufferedReader(anyString());
+        doThrow(new IOException("failure")).when(mockBufferedReader).close();
+        spyService.readAndCreateMap("test");
+
+    }
 }
