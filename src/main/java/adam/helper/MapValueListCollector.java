@@ -33,7 +33,7 @@ public class MapValueListCollector implements Collector<String, Map<String, Obje
                 values[0] = (String) value;
                 values[1] = str;
                 stringObjectMap.put(key, values);
-            } else if(value instanceof String[]) {
+            } else {
                 String[] values = (String[]) value;
                 String[] newValues = new String[values.length + 1];
                 System.arraycopy(values, 0, newValues, 0, values.length);
