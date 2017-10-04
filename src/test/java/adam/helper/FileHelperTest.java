@@ -1,19 +1,16 @@
 package adam.helper;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.File;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class FileHelperTest {
+class FileHelperTest {
 
     private FileHelper fileHelper;
 
@@ -23,34 +20,35 @@ public class FileHelperTest {
     @Mock
     private File mockFile;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
+        initMocks(this);
         fileHelper = new FileHelper(mockMyLogger);
     }
 
     @Test
-    public void isCorrectFileNotExists() throws Exception {
+    void isCorrectFileNotExists() throws Exception {
         FileHelper spyHelper = spy(fileHelper);
         doReturn(mockFile).when(spyHelper).getFile(anyString());
         when(mockFile.exists()).thenReturn(false);
         boolean result = spyHelper.isCorrectFile("someFile");
         verify(mockMyLogger).error("The given file: someFile doesn't exist");
-        assertThat(result, equalTo(false));
+        assertEquals(false, result);
     }
 
     @Test
-    public void isCorrectFileIsNotAFile() throws Exception {
+    void isCorrectFileIsNotAFile() throws Exception {
         FileHelper spyHelper = spy(fileHelper);
         doReturn(mockFile).when(spyHelper).getFile(anyString());
         when(mockFile.exists()).thenReturn(true);
         when(mockFile.isFile()).thenReturn(false);
         boolean result = spyHelper.isCorrectFile("someFile");
         verify(mockMyLogger).error("The given file: someFile is not a file");
-        assertThat(result, equalTo(false));
+        assertEquals(false, result);
     }
 
     @Test
-    public void isCorrectFileCannotBeRead() throws Exception {
+    void isCorrectFileCannotBeRead() throws Exception {
         FileHelper spyHelper = spy(fileHelper);
         doReturn(mockFile).when(spyHelper).getFile(anyString());
         when(mockFile.exists()).thenReturn(true);
@@ -58,7 +56,7 @@ public class FileHelperTest {
         when(mockFile.canRead()).thenReturn(false);
         boolean result = spyHelper.isCorrectFile("someFile");
         verify(mockMyLogger).error("The given file: someFile cannot be read");
-        assertThat(result, equalTo(false));
+        assertEquals(false, result);
     }
 
 }

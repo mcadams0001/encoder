@@ -3,29 +3,24 @@ package adam;
 import adam.helper.FileHelper;
 import adam.services.ControllerService;
 import adam.services.helper.TestFileHelper;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DecodePhoneNumbersTest {
+class DecodePhoneNumbersTest {
 
     private DecodePhoneNumbers decodePhoneNumbers;
 
@@ -34,13 +29,14 @@ public class DecodePhoneNumbersTest {
     @Mock
     private FileHelper mockFileHelper;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
+        initMocks(this);
         decodePhoneNumbers = new DecodePhoneNumbers(mockFileHelper, mockControllerService);
     }
 
     @Test
-    public void processFiles() throws Exception {
+    void processFiles() throws Exception {
         when(mockFileHelper.isCorrectFile(anyString())).thenReturn(true);
         when(mockControllerService.decodeAndPrintPhoneNumbers(anyString(), anyString())).thenReturn(true);
         decodePhoneNumbers.processFiles("file1", "file2");
@@ -50,7 +46,7 @@ public class DecodePhoneNumbersTest {
     }
 
     @Test
-    public void processInvalidFiles() throws Exception {
+    void processInvalidFiles() throws Exception {
         when(mockFileHelper.isCorrectFile(anyString())).thenReturn(false);
         decodePhoneNumbers.processFiles("file1", "file2");
         verify(mockFileHelper).isCorrectFile(anyString());
@@ -58,56 +54,58 @@ public class DecodePhoneNumbersTest {
     }
 
     @Test
-    public void invalidFiles() throws Exception {
+    void invalidFiles() throws Exception {
         when(mockFileHelper.isCorrectFile(anyString())).thenReturn(true);
         boolean result = decodePhoneNumbers.invalidFiles("file1", "file2");
-        assertThat(result, equalTo(false));
+        assertEquals(false, result);
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(mockFileHelper, times(2)).isCorrectFile(captor.capture());
         List<String> allValues = captor.getAllValues();
-        assertThat(allValues, hasItems("file1", "file2"));
+        assertTrue(allValues.contains("file1"));
+        assertTrue(allValues.contains("file2"));
     }
 
 
     @Test
-    public void invalidFilesSecondInvalid() throws Exception {
+    void invalidFilesSecondInvalid() throws Exception {
         when(mockFileHelper.isCorrectFile(anyString())).thenReturn(true).thenReturn(false);
         boolean result = decodePhoneNumbers.invalidFiles("file1", "file2");
-        assertThat(result, equalTo(true));
+        assertEquals(true, result);
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(mockFileHelper, times(2)).isCorrectFile(captor.capture());
         List<String> allValues = captor.getAllValues();
-        assertThat(allValues, hasItems("file1", "file2"));
+        assertTrue(allValues.contains("file1"));
+        assertTrue(allValues.contains("file2"));
     }
 
 
     @Test
-    public void invalidFilesFirstInvalid() throws Exception {
+    void invalidFilesFirstInvalid() throws Exception {
         when(mockFileHelper.isCorrectFile(anyString())).thenReturn(false);
         boolean result = decodePhoneNumbers.invalidFiles("file1", "file2");
-        assertThat(result, equalTo(true));
+        assertEquals(true, result);
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(mockFileHelper).isCorrectFile(captor.capture());
-        assertThat(captor.getValue(), equalTo("file1"));
+        assertEquals("file1", captor.getValue());
     }
 
     @Test
-    public void namePrintParameters() throws Exception {
+    void namePrintParameters() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(os);
         System.setOut(printStream);
         DecodePhoneNumbers.main(new String[]{"file1"});
-        assertThat(os.toString(), equalTo("Usage: [dictionary file name] [phone numbers file name]\n"));
+        assertTrue( os.toString().startsWith("Usage: [dictionary file name] [phone numbers file name]"));
     }
 
     @Test
-    public void processActualFiles() throws Exception {
+    void processActualFiles() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(os);
         System.setOut(printStream);
         File dictionaryFile = TestFileHelper.getTestFile("./small_dict.txt");
         File phoneNumbersFile = TestFileHelper.getTestFile("./small_sample.txt");
         DecodePhoneNumbers.main(new String[]{dictionaryFile.getAbsolutePath(), phoneNumbersFile.getAbsolutePath()});
-        assertThat(os.toString(), notNullValue());
+        assertNotNull(os.toString());
     }
 }

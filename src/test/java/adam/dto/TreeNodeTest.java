@@ -1,31 +1,30 @@
 package adam.dto;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TreeNodeTest {
+class TreeNodeTest {
 
     @Test
-    public void createTreeNode() throws Exception {
+    void createTreeNode() throws Exception {
         TreeNode node = new TreeNode(" test ", "ing");
-        assertThat(node.getWord(), equalTo("test"));
-        assertThat(node.getRemainingString(), equalTo("ing"));
-        assertThat(node.isLeaf(), equalTo(true));
-        assertThat(node.hasLeafs(), equalTo(false));
+        assertEquals("test", node.getWord());
+        assertEquals("ing", node.getRemainingString());
+        assertEquals(true, node.isLeaf());
+        assertEquals(false, node.hasLeafs());
     }
 
     @Test
-    public void createTreeNodeWithNode() throws Exception {
+    void createTreeNodeWithNode() throws Exception {
         TreeNode node = new TreeNode(" test ", "ing");
         TreeNode subNode = new TreeNode("te", "sting");
         node.add(subNode);
-        assertThat(node.getWord(), equalTo("test"));
-        assertThat(node.getRemainingString(), equalTo("ing"));
-        assertThat(node.isLeaf(), equalTo(false));
-        assertThat(node.hasLeafs(), equalTo(true));
-        assertThat(node.getNodes(), hasItem(subNode));
+        assertEquals("test", node.getWord());
+        assertEquals("ing", node.getRemainingString());
+        assertEquals(false, node.isLeaf());
+        assertEquals(true, node.hasLeafs());
+        assertTrue(node.getNodes().contains(subNode));
     }
 }

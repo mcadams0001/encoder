@@ -1,17 +1,15 @@
 package adam.helper;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.PrintStream;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
-public class MyLoggerTest {
+class MyLoggerTest {
 
     @Mock
     private PrintStream mockPrintStream;
@@ -22,26 +20,27 @@ public class MyLoggerTest {
 
     private MyLogger logger;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
+        initMocks(this);
         logger = new MyLogger(mockPrintStream, mockErrorStream);
     }
 
     @Test
-    public void testInfo() throws Exception {
+    void testInfo() throws Exception {
         new MyLogger();
         logger.info("test");
         verify(mockPrintStream).println("test");
     }
 
     @Test
-    public void testError() throws Exception {
+    void testError() throws Exception {
         logger.error("test");
         verify(mockErrorStream).println("test");
     }
 
     @Test
-    public void testErrorWithException() throws Exception {
+    void testErrorWithException() throws Exception {
         logger.error("test", mockException);
         verify(mockErrorStream).println("test");
         verify(mockException).printStackTrace(mockErrorStream);

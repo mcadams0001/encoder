@@ -2,52 +2,62 @@ package adam.services;
 
 import adam.dto.TreeNode;
 import adam.services.fixtures.DictionaryFixture;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class EncodingServiceImplTest {
+class EncodingServiceImplTest {
     private EncodingServiceImpl service;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         service = new EncodingServiceImpl(DictionaryFixture.DICTIONARY_MAP);
     }
 
     @Test
-    public void testEncodeNumber() throws Exception {
-        assertThat(service.encodeNumber("562482"),hasItems("mir Tor", "Mix Tor"));
+    void testEncodeNumber() throws Exception {
+        List<String> actual = service.encodeNumber("562482");
+        assertTrue(actual.contains("mir Tor"));
+        assertTrue(actual.contains("Mix Tor"));
     }
 
     @Test
-    public void shouldEncodeNumberWithDigitInside() throws Exception {
-        assertThat(service.encodeNumber("4824"),hasItems("Torf", "fort", "Tor 4"));
+    void shouldEncodeNumberWithDigitInside() throws Exception {
+        List<String> actual = service.encodeNumber("4824");
+        assertTrue(actual.contains("Torf"));
+        assertTrue(actual.contains("fort"));
+        assertTrue(actual.contains("Tor 4"));
     }
 
     @Test
-    public void shouldEncodeNumberWithDigitAtTheBeginning() throws Exception {
-        assertThat(service.encodeNumber("04824"), hasItems("0 Torf","0 fort","0 Tor 4"));
+    void shouldEncodeNumberWithDigitAtTheBeginning() throws Exception {
+        List<String> actual = service.encodeNumber("04824");
+        assertTrue(actual.contains("0 Torf"));
+        assertTrue(actual.contains("0 fort"));
+        assertTrue(actual.contains("0 Tor 4"));
     }
 
     @Test
-    public void shouldEncodeNumberWithDigitAtTheEnd() throws Exception {
-        assertThat(service.encodeNumber("107835"), hasItems("neu o\"d 5", "je bo\"s 5", "je Bo\" da"));
+    void shouldEncodeNumberWithDigitAtTheEnd() throws Exception {
+        List<String> actual = service.encodeNumber("107835");
+        assertTrue(actual.contains("neu o\"d 5"));
+        assertTrue(actual.contains("je bo\"s 5"));
+        assertTrue(actual.contains("je Bo\" da"));
     }
 
     @Test
-    public void shouldNotEncodeNumberWithLessDigits() throws Exception {
+    void shouldNotEncodeNumberWithLessDigits() throws Exception {
         List<String> actual = service.encodeNumber("");
-        assertThat(actual.isEmpty(), equalTo(true));
+        assertTrue(actual.isEmpty());
     }
 
     @Test
-    public void testFindLeaves() throws Exception {
+    void testFindLeaves() throws Exception {
         TreeNode treeNode = new TreeNode("MimeBea8beu", "");
         TreeNode treeNode2 = new TreeNode("MimeBea", "8706");
         treeNode2.add(treeNode);
@@ -57,53 +67,59 @@ public class EncodingServiceImplTest {
         root.add(treeNode3);
         List<TreeNode> leafs = new ArrayList<>();
         service.extractLeafsFromTree(root, leafs);
-        assertThat(leafs, notNullValue());
-        assertThat(leafs.size(), equalTo(1));
-        assertThat(leafs.get(0), equalTo(treeNode));
+        assertNotNull(leafs);
+        assertEquals(1, leafs.size());
+        assertEquals(treeNode, leafs.get(0));
     }
 
     @Test
-    public void testShouldConvertTreeNodeListToStringList() throws Exception {
+    void testShouldConvertTreeNodeListToStringList() throws Exception {
         List<TreeNode> leafs = new ArrayList<>();
         leafs.add(new TreeNode("MimeBea8beu", ""));
         leafs.add(new TreeNode("MimeTea4You", ""));
         leafs.add(new TreeNode("Mime4YouTea", ""));
         List<String> encodedNumberList = service.transformToStringList(leafs);
-        assertThat(encodedNumberList, notNullValue());
-        assertThat(encodedNumberList.size(), equalTo(leafs.size()));
-        assertThat(encodedNumberList, hasItems(leafs.get(0).getWord(), leafs.get(1).getWord(), leafs.get(2).getWord()));
+        assertNotNull(encodedNumberList);
+        assertEquals(leafs.size(), encodedNumberList.size());
+        assertTrue(encodedNumberList.contains(leafs.get(0).getWord()));
+        assertTrue(encodedNumberList.contains(leafs.get(1).getWord()));
+        assertTrue(encodedNumberList.contains(leafs.get(2).getWord()));
 
     }
 
     @Test
-    public void testFindAllSegments() throws Exception {
+    void testFindAllSegments() throws Exception {
 
     }
 
     @Test
-    public void testFindSegment() throws Exception {
+    void testFindSegment() throws Exception {
         TreeNode node = new TreeNode("", "5624-82");
         service.findSegment(node);
-        assertThat(node.getNodes().size(), equalTo(2));
+        assertEquals(2, node.getNodes().size());
         List<String> wordList = node.getNodes().stream().map(TreeNode::getWord).collect(toList());
-        assertThat(wordList, hasItems("mir", "Mix"));
+        assertTrue(wordList.contains("mir"));
+        assertTrue(wordList.contains("Mix"));
     }
 
     @Test
-    public void testSearchWordsFromTheBeginning() throws Exception {
+    void testSearchWordsFromTheBeginning() throws Exception {
         TreeNode node = new TreeNode("", "5624-82");
         service.searchWords(node, 0);
-        assertThat(node.getNodes().size(), equalTo(2));
+        assertEquals(2, node.getNodes().size());
         List<String> wordList = node.getNodes().stream().map(TreeNode::getWord).collect(toList());
-        assertThat(wordList, hasItems("mir", "Mix"));
+        assertTrue(wordList.contains("mir"));
+        assertTrue(wordList.contains("Mix"));
     }
 
     @Test
-    public void testSearchWordsFromIndexOne() throws Exception {
+    void testSearchWordsFromIndexOne() throws Exception {
         TreeNode node = new TreeNode("", "04824");
         service.searchWords(node, 1);
-        assertThat(node.getNodes().size(), equalTo(3));
+        assertEquals(3, node.getNodes().size());
         List<String> wordList = node.getNodes().stream().map(TreeNode::getWord).collect(toList());
-        assertThat(wordList, hasItems("0 fort", "0 Torf", "0 Tor"));
+        assertTrue(wordList.contains("0 fort"));
+        assertTrue(wordList.contains("0 Torf"));
+        assertTrue(wordList.contains("0 Tor"));
     }
 }
