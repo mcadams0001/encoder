@@ -12,7 +12,9 @@ import org.mockito.Mockito;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,13 +32,13 @@ class DecodePhoneNumbersTest {
     private FileHelper mockFileHelper;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         initMocks(this);
         decodePhoneNumbers = new DecodePhoneNumbers(mockFileHelper, mockControllerService);
     }
 
     @Test
-    void processFiles() throws Exception {
+    void processFiles() {
         when(mockFileHelper.isCorrectFile(anyString())).thenReturn(true);
         when(mockControllerService.decodeAndPrintPhoneNumbers(anyString(), anyString())).thenReturn(true);
         decodePhoneNumbers.processFiles("file1", "file2");
@@ -46,7 +48,7 @@ class DecodePhoneNumbersTest {
     }
 
     @Test
-    void processInvalidFiles() throws Exception {
+    void processInvalidFiles() {
         when(mockFileHelper.isCorrectFile(anyString())).thenReturn(false);
         decodePhoneNumbers.processFiles("file1", "file2");
         verify(mockFileHelper).isCorrectFile(anyString());
@@ -54,10 +56,10 @@ class DecodePhoneNumbersTest {
     }
 
     @Test
-    void invalidFiles() throws Exception {
+    void invalidFiles() {
         when(mockFileHelper.isCorrectFile(anyString())).thenReturn(true);
         boolean result = decodePhoneNumbers.invalidFiles("file1", "file2");
-        assertEquals(false, result);
+        assertFalse(result);
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(mockFileHelper, times(2)).isCorrectFile(captor.capture());
         List<String> allValues = captor.getAllValues();
@@ -67,10 +69,10 @@ class DecodePhoneNumbersTest {
 
 
     @Test
-    void invalidFilesSecondInvalid() throws Exception {
+    void invalidFilesSecondInvalid() {
         when(mockFileHelper.isCorrectFile(anyString())).thenReturn(true).thenReturn(false);
         boolean result = decodePhoneNumbers.invalidFiles("file1", "file2");
-        assertEquals(true, result);
+        assertTrue(result);
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(mockFileHelper, times(2)).isCorrectFile(captor.capture());
         List<String> allValues = captor.getAllValues();
@@ -80,26 +82,26 @@ class DecodePhoneNumbersTest {
 
 
     @Test
-    void invalidFilesFirstInvalid() throws Exception {
+    void invalidFilesFirstInvalid() {
         when(mockFileHelper.isCorrectFile(anyString())).thenReturn(false);
         boolean result = decodePhoneNumbers.invalidFiles("file1", "file2");
-        assertEquals(true, result);
+        assertTrue(result);
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(mockFileHelper).isCorrectFile(captor.capture());
         assertEquals("file1", captor.getValue());
     }
 
     @Test
-    void namePrintParameters() throws Exception {
+    void namePrintParameters() {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(os);
         System.setOut(printStream);
         DecodePhoneNumbers.main(new String[]{"file1"});
-        assertTrue( os.toString().startsWith("Usage: [dictionary file name] [phone numbers file name]"));
+        assertTrue(os.toString().startsWith("Usage: [dictionary file name] [phone numbers file name]"));
     }
 
     @Test
-    void processActualFiles() throws Exception {
+    void processActualFiles() throws FileNotFoundException, URISyntaxException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(os);
         System.setOut(printStream);

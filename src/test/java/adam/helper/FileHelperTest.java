@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -21,34 +22,34 @@ class FileHelperTest {
     private File mockFile;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         initMocks(this);
         fileHelper = new FileHelper(mockMyLogger);
     }
 
     @Test
-    void isCorrectFileNotExists() throws Exception {
+    void isCorrectFileNotExists() {
         FileHelper spyHelper = spy(fileHelper);
         doReturn(mockFile).when(spyHelper).getFile(anyString());
         when(mockFile.exists()).thenReturn(false);
         boolean result = spyHelper.isCorrectFile("someFile");
         verify(mockMyLogger).error("The given file: someFile doesn't exist");
-        assertEquals(false, result);
+        assertFalse(result);
     }
 
     @Test
-    void isCorrectFileIsNotAFile() throws Exception {
+    void isCorrectFileIsNotAFile() {
         FileHelper spyHelper = spy(fileHelper);
         doReturn(mockFile).when(spyHelper).getFile(anyString());
         when(mockFile.exists()).thenReturn(true);
         when(mockFile.isFile()).thenReturn(false);
         boolean result = spyHelper.isCorrectFile("someFile");
         verify(mockMyLogger).error("The given file: someFile is not a file");
-        assertEquals(false, result);
+        assertFalse(result);
     }
 
     @Test
-    void isCorrectFileCannotBeRead() throws Exception {
+    void isCorrectFileCannotBeRead() {
         FileHelper spyHelper = spy(fileHelper);
         doReturn(mockFile).when(spyHelper).getFile(anyString());
         when(mockFile.exists()).thenReturn(true);
@@ -56,7 +57,7 @@ class FileHelperTest {
         when(mockFile.canRead()).thenReturn(false);
         boolean result = spyHelper.isCorrectFile("someFile");
         verify(mockMyLogger).error("The given file: someFile cannot be read");
-        assertEquals(false, result);
+        assertFalse(result);
     }
 
 }

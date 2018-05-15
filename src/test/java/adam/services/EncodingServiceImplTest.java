@@ -15,19 +15,19 @@ class EncodingServiceImplTest {
     private EncodingServiceImpl service;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         service = new EncodingServiceImpl(DictionaryFixture.DICTIONARY_MAP);
     }
 
     @Test
-    void testEncodeNumber() throws Exception {
+    void testEncodeNumber() {
         List<String> actual = service.encodeNumber("562482");
         assertTrue(actual.contains("mir Tor"));
         assertTrue(actual.contains("Mix Tor"));
     }
 
     @Test
-    void shouldEncodeNumberWithDigitInside() throws Exception {
+    void shouldEncodeNumberWithDigitInside() {
         List<String> actual = service.encodeNumber("4824");
         assertTrue(actual.contains("Torf"));
         assertTrue(actual.contains("fort"));
@@ -35,7 +35,7 @@ class EncodingServiceImplTest {
     }
 
     @Test
-    void shouldEncodeNumberWithDigitAtTheBeginning() throws Exception {
+    void shouldEncodeNumberWithDigitAtTheBeginning() {
         List<String> actual = service.encodeNumber("04824");
         assertTrue(actual.contains("0 Torf"));
         assertTrue(actual.contains("0 fort"));
@@ -43,7 +43,7 @@ class EncodingServiceImplTest {
     }
 
     @Test
-    void shouldEncodeNumberWithDigitAtTheEnd() throws Exception {
+    void shouldEncodeNumberWithDigitAtTheEnd() {
         List<String> actual = service.encodeNumber("107835");
         assertTrue(actual.contains("neu o\"d 5"));
         assertTrue(actual.contains("je bo\"s 5"));
@@ -51,13 +51,13 @@ class EncodingServiceImplTest {
     }
 
     @Test
-    void shouldNotEncodeNumberWithLessDigits() throws Exception {
+    void shouldNotEncodeNumberWithLessDigits() {
         List<String> actual = service.encodeNumber("");
         assertTrue(actual.isEmpty());
     }
 
     @Test
-    void testFindLeaves() throws Exception {
+    void testFindLeaves() {
         TreeNode treeNode = new TreeNode("MimeBea8beu", "");
         TreeNode treeNode2 = new TreeNode("MimeBea", "8706");
         treeNode2.add(treeNode);
@@ -73,7 +73,7 @@ class EncodingServiceImplTest {
     }
 
     @Test
-    void testShouldConvertTreeNodeListToStringList() throws Exception {
+    void testShouldConvertTreeNodeListToStringList() {
         List<TreeNode> leafs = new ArrayList<>();
         leafs.add(new TreeNode("MimeBea8beu", ""));
         leafs.add(new TreeNode("MimeTea4You", ""));
@@ -88,12 +88,12 @@ class EncodingServiceImplTest {
     }
 
     @Test
-    void testFindAllSegments() throws Exception {
+    void testFindAllSegments() {
 
     }
 
     @Test
-    void testFindSegment() throws Exception {
+    void testFindSegment() {
         TreeNode node = new TreeNode("", "5624-82");
         service.findSegment(node);
         assertEquals(2, node.getNodes().size());
@@ -103,7 +103,7 @@ class EncodingServiceImplTest {
     }
 
     @Test
-    void testSearchWordsFromTheBeginning() throws Exception {
+    void testSearchWordsFromTheBeginning() {
         TreeNode node = new TreeNode("", "5624-82");
         service.searchWords(node, 0);
         assertEquals(2, node.getNodes().size());
@@ -113,7 +113,7 @@ class EncodingServiceImplTest {
     }
 
     @Test
-    void testSearchWordsFromIndexOne() throws Exception {
+    void testSearchWordsFromIndexOne() {
         TreeNode node = new TreeNode("", "04824");
         service.searchWords(node, 1);
         assertEquals(3, node.getNodes().size());

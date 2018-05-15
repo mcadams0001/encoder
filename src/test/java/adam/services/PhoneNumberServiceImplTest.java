@@ -13,17 +13,17 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 
-public class PhoneNumberServiceImplTest {
+class PhoneNumberServiceImplTest {
 
     private PhoneNumberServiceImpl service;
 
     @BeforeEach
-    public void setup() throws Exception {
+    void setup() {
         service = new PhoneNumberServiceImpl(new EncodingServiceImpl(DictionaryFixture.DICTIONARY_MAP));
     }
 
     @Test
-    public void testReadAndEncodePhoneNumbers() throws Exception {
+    void testReadAndEncodePhoneNumbers() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(os);
         System.setOut(printStream);
@@ -37,7 +37,7 @@ public class PhoneNumberServiceImplTest {
     }
 
     @Test
-    public void testConvertAndPrintLines() throws Exception {
+    void testConvertAndPrintLines() {
         Stream<String> stream = Stream.of("5624-82", "10/783--5");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(os);
@@ -51,7 +51,7 @@ public class PhoneNumberServiceImplTest {
     }
 
     @Test
-    public void testPrintPhoneNumbers() throws Exception {
+    void testPrintPhoneNumbers() {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(os);
         service.printPhoneNumbers("5624-82", printStream);
@@ -60,17 +60,15 @@ public class PhoneNumberServiceImplTest {
     }
 
     @Test
-    public void testConvertString() throws Exception {
+    void testConvertString() {
         assertEquals("107835", PhoneNumberServiceImpl.removeSpecialCharacters("10/783--5"));
     }
 
     @Test
-    public void rethrowIOException() throws Exception {
+    void rethrowIOException() throws Exception {
         PhoneNumberServiceImpl spyService = spy(service);
         doThrow(new FileNotFoundException("failure")).when(spyService).getBufferedReader(anyString());
-        assertThrows(IOException.class, () -> {
-            spyService.readAndEncodePhoneNumbers("someFile");
-        });
+        assertThrows(IOException.class, () -> spyService.readAndEncodePhoneNumbers("someFile"));
 
     }
 }

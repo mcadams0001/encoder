@@ -2,8 +2,7 @@ package adam.dto;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TreeNodeTest {
 
@@ -12,8 +11,8 @@ class TreeNodeTest {
         TreeNode node = new TreeNode(" test ", "ing");
         assertEquals("test", node.getWord());
         assertEquals("ing", node.getRemainingString());
-        assertEquals(true, node.isLeaf());
-        assertEquals(false, node.hasLeafs());
+        assertTrue(node.isLeaf());
+        assertFalse(node.hasLeafs());
     }
 
     @Test
@@ -23,8 +22,8 @@ class TreeNodeTest {
         node.add(subNode);
         assertEquals("test", node.getWord());
         assertEquals("ing", node.getRemainingString());
-        assertEquals(false, node.isLeaf());
-        assertEquals(true, node.hasLeafs());
+        assertFalse(node.isLeaf());
+        assertTrue(node.hasLeafs());
         assertTrue(node.getNodes().contains(subNode));
     }
 }

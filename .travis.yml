@@ -1,15 +1,16 @@
 language: java
 sudo: false
-install: true
+before_install: wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh
+install: . ./install-jdk.sh -F 10 -L GPL
 addons:
-  sonarqube:
+  sonarcloud:
     organization: "mcadams0001-github"
     token:
       secure: "Np09qCHDAo/ibNWmhlbFRfT2FeZ39JXKTtdF7R5qQ7qFhsRL1CgReUY/mKwiPLXHUUwBMVaUIWMekiXlxd8hM/Vy6BbNxQQrshihX7ar1t2TRM1piu6hbuMd6zgDYhBZPQmHeXbxh3HGLq/p14NDzLwkIeMULn6fF4Oy9VTMINZNvu3hSRIqewufRq+RdZp2ULzCXD170LLJ3G7YZUWJG9Phs64fvMHR4DhsMK2I6Xf5fhxd8DcQakExG8VX6QaWurKClgqoeri26bu5ALjoUDb0oG8A1bMoZ0hoLbLXEG15W0O3vonzmInLwc+UGAL+Gro8QwZ64kBvE5mDczU9UZzd02IGFwmMIqI1jD/DX5LACxqKfrcA9bAP4Q+P1PpoWG9C6JA0nExaD22IEw6o0DXfxBixR7jPCh3M3P0bVMVsBwtaYIHLtCSDzi6HOD/tLBMdbCz3FW6bknzc9Hd0noPHX5/RQIZ/SN95d0q7YQyfBSBmUgm8AzJ84Q1QwDEysPXVIHFAt6zDc02uVgmc/gDYuES6ys2Qrwko+PIink4Cn5pK/6PawWoi2nqZiYYaezaD0F3CmF8+7hn0OyQCTFxacJ2GgsM/3IVXYXEwaDbK0Vqn8SJUruQJ6OzCbsTVLWeCTbAh+mOTGMRc2rr4yW34+nuUZnhxc3YOtmjSC6E="
-jdk:
-  - oraclejdk8
+env:
+  - JDK='OpenJDK 10'
 script:
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+  - mvn clean install sonar:sonar
 cache:
   directories:
     - '$HOME/.m2/repository'

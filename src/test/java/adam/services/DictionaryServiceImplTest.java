@@ -45,7 +45,7 @@ class DictionaryServiceImplTest {
     }
 
     @Test
-    void shouldEncodeWordToNumber() throws Exception {
+    void shouldEncodeWordToNumber() {
         String encodedNumber = DictionaryServiceImpl.encodeWordToNumber("Aachen");
         assertEquals("556901", encodedNumber);
     }
@@ -54,17 +54,12 @@ class DictionaryServiceImplTest {
     void throwFileNotFoundException() throws Exception {
         DictionaryServiceImpl spyService = spy(service);
         doThrow(new FileNotFoundException()).when(spyService).getBufferedReader(anyString());
-        assertThrows(FileNotFoundException.class, () -> {
-            spyService.readAndCreateMap("test.txt");
-        });
+        assertThrows(FileNotFoundException.class, () -> spyService.readAndCreateMap("test.txt"));
     }
 
     @Test
-    void shouldReturnNullResource() throws Exception {
-        assertThrows(IOException.class, () -> {
-            service.readAndCreateMap("");
-        });
-
+    void shouldReturnNullResource() {
+        assertThrows(IOException.class, () -> service.readAndCreateMap(""));
     }
 
     @Test
@@ -73,9 +68,7 @@ class DictionaryServiceImplTest {
         doReturn(mockBufferedReader).when(spyService).getBufferedReader(anyString());
         when(mockBufferedReader.lines()).thenReturn(mockStream);
         doThrow(new UncheckedIOException("failure", new IOException())).when(spyService).createDictionaryMapNumberToWord(mockStream);
-        assertThrows(UncheckedIOException.class, () -> {
-            spyService.readAndCreateMap("test");
-        });
+        assertThrows(UncheckedIOException.class, () -> spyService.readAndCreateMap("test"));
 
     }
 
@@ -84,9 +77,7 @@ class DictionaryServiceImplTest {
         DictionaryServiceImpl spyService = spy(service);
         doReturn(mockBufferedReader).when(spyService).getBufferedReader(anyString());
         doThrow(new IOException("failure")).when(mockBufferedReader).close();
-        assertThrows(IOException.class, () -> {
-            spyService.readAndCreateMap("test");
-        });
+        assertThrows(IOException.class, () -> spyService.readAndCreateMap("test"));
 
     }
 }

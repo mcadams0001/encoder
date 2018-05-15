@@ -21,26 +21,26 @@ class MyLoggerTest {
     private MyLogger logger;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         initMocks(this);
         logger = new MyLogger(mockPrintStream, mockErrorStream);
     }
 
     @Test
-    void testInfo() throws Exception {
+    void testInfo() {
         new MyLogger();
         logger.info("test");
         verify(mockPrintStream).println("test");
     }
 
     @Test
-    void testError() throws Exception {
+    void testError() {
         logger.error("test");
         verify(mockErrorStream).println("test");
     }
 
     @Test
-    void testErrorWithException() throws Exception {
+    void testErrorWithException() {
         logger.error("test", mockException);
         verify(mockErrorStream).println("test");
         verify(mockException).printStackTrace(mockErrorStream);
