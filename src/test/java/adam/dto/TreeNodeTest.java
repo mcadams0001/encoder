@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TreeNodeTest {
 
     @Test
-    void createTreeNode() throws Exception {
+    void createTreeNode() {
         TreeNode node = new TreeNode(" test ", "ing");
         assertEquals("test", node.getWord());
         assertEquals("ing", node.getRemainingString());
@@ -16,7 +16,7 @@ class TreeNodeTest {
     }
 
     @Test
-    void createTreeNodeWithNode() throws Exception {
+    void createTreeNodeWithNode() {
         TreeNode node = new TreeNode(" test ", "ing");
         TreeNode subNode = new TreeNode("te", "sting");
         node.add(subNode);

@@ -2,15 +2,16 @@ package adam.helper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class FileHelperTest {
 
     private FileHelper fileHelper;
@@ -23,7 +24,6 @@ class FileHelperTest {
 
     @BeforeEach
     void setUp() {
-        initMocks(this);
         fileHelper = new FileHelper(mockMyLogger);
     }
 

@@ -2,13 +2,15 @@ package adam.helper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.PrintStream;
 
 import static org.mockito.Mockito.verify;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class MyLoggerTest {
 
     @Mock
@@ -22,7 +24,6 @@ class MyLoggerTest {
 
     @BeforeEach
     void setUp() {
-        initMocks(this);
         logger = new MyLogger(mockPrintStream, mockErrorStream);
     }
 
