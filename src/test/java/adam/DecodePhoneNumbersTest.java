@@ -5,10 +5,12 @@ import adam.services.ControllerService;
 import adam.services.helper.TestFileHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,8 +22,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class DecodePhoneNumbersTest {
 
     private DecodePhoneNumbers decodePhoneNumbers;
@@ -33,7 +35,6 @@ class DecodePhoneNumbersTest {
 
     @BeforeEach
     void setUp() {
-        initMocks(this);
         decodePhoneNumbers = new DecodePhoneNumbers(mockFileHelper, mockControllerService);
     }
 
@@ -89,15 +90,6 @@ class DecodePhoneNumbersTest {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(mockFileHelper).isCorrectFile(captor.capture());
         assertEquals("file1", captor.getValue());
-    }
-
-    @Test
-    void namePrintParameters() {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(os);
-        System.setOut(printStream);
-        DecodePhoneNumbers.main(new String[]{"file1"});
-        assertTrue(os.toString().startsWith("Usage: [dictionary file name] [phone numbers file name]"));
     }
 
     @Test

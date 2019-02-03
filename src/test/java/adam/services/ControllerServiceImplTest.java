@@ -1,6 +1,5 @@
 package adam.services;
 
-import adam.helper.MyLogger;
 import adam.services.helper.TestFileHelper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,12 +26,9 @@ class ControllerServiceImplTest {
     @Mock
     private PhoneNumberService mockPhoneNumberService;
 
-    @Mock
-    private MyLogger mockLogger;
-
     @Test
     void testDecodeAndPrintPhoneNumbers() throws Exception {
-        ControllerServiceImpl service = new ControllerServiceImpl(new DictionaryServiceImpl(), mockLogger);
+        ControllerServiceImpl service = new ControllerServiceImpl(new DictionaryServiceImpl());
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(os);
         System.setOut(printStream);
@@ -49,7 +45,7 @@ class ControllerServiceImplTest {
 
     @Test
     void testDecodeAndPrintPhoneNumbersAndReturnFalse() throws Exception {
-        ControllerServiceImpl service = new ControllerServiceImpl(mockDictionaryService, mockLogger);
+        ControllerServiceImpl service = new ControllerServiceImpl(mockDictionaryService);
         ControllerServiceImpl spyService = spy(service);
         when(mockDictionaryService.readAndCreateMap(anyString())).thenReturn(new HashMap<>());
         doReturn(mockPhoneNumberService).when(spyService).getPhoneNumberService(anyMap());
@@ -60,14 +56,14 @@ class ControllerServiceImplTest {
 
     @Test
     void testReturnFalseOnEmptyDictionary() {
-        ControllerServiceImpl service = new ControllerServiceImpl(mockDictionaryService, mockLogger);
+        ControllerServiceImpl service = new ControllerServiceImpl(mockDictionaryService);
         boolean result = service.decodeAndPrintPhoneNumbers("dictFile", "numFile");
         assertFalse(result);
     }
 
     @Test
     void captureDirectoryMapExceptionAndReturnNull() throws Exception {
-        ControllerServiceImpl service = new ControllerServiceImpl(mockDictionaryService, mockLogger);
+        ControllerServiceImpl service = new ControllerServiceImpl(mockDictionaryService);
         doThrow(new IOException("failed")).when(mockDictionaryService).readAndCreateMap(anyString());
         Map<String, Object> directoryMap = service.getDirectoryMap("small_dict.txt");
         verify(mockDictionaryService).readAndCreateMap(anyString());
@@ -77,7 +73,7 @@ class ControllerServiceImplTest {
     @Test
     void encodePhoneNumbersUsingDictionaryAndCaptureException() throws Exception {
         Map<String, Object> dictionaryMap = new HashMap<>();
-        ControllerServiceImpl service = new ControllerServiceImpl(mockDictionaryService, mockLogger);
+        ControllerServiceImpl service = new ControllerServiceImpl(mockDictionaryService);
         ControllerServiceImpl spyService = spy(service);
         doReturn(mockPhoneNumberService).when(spyService).getPhoneNumberService(anyMap());
         doThrow(new IOException("failure")).when(mockPhoneNumberService).readAndEncodePhoneNumbers(anyString());

@@ -1,9 +1,10 @@
 package adam.services;
 
 import adam.services.helper.TestFileHelper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.*;
 import java.util.Arrays;
@@ -14,9 +15,9 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 
+@ExtendWith(MockitoExtension.class)
 class DictionaryServiceImplTest {
     private DictionaryServiceImpl service = new DictionaryServiceImpl();
 
@@ -25,11 +26,6 @@ class DictionaryServiceImplTest {
 
     @Mock
     private Stream<String> mockStream;
-
-    @BeforeEach
-    void setup() {
-        initMocks(this);
-    }
 
     @Test
     void shouldCreateDictionaryFile() throws Exception {

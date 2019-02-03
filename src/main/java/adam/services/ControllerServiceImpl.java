@@ -1,18 +1,18 @@
 package adam.services;
 
-import adam.helper.MyLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Map;
 
 public class ControllerServiceImpl implements ControllerService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ControllerServiceImpl.class);
     private DictionaryService dictionaryService;
-    private MyLogger myLogger;
 
-    public ControllerServiceImpl(DictionaryService dictionaryService, MyLogger myLogger) {
+    public ControllerServiceImpl(DictionaryService dictionaryService) {
         this.dictionaryService = dictionaryService;
-        this.myLogger = myLogger;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class ControllerServiceImpl implements ControllerService {
         try {
             phoneNumberService.readAndEncodePhoneNumbers(phoneNumbersFileName);
         } catch (IOException e) {
-            myLogger.error("Failed to process phone numbers file: " + phoneNumbersFileName + " with error message: " + e.getMessage(), e);
+            LOGGER.error("Failed to process phone numbers file: {} with error message: {}", phoneNumbersFileName, e.getMessage(), e);
             return false;
         }
         return true;
@@ -40,7 +40,7 @@ public class ControllerServiceImpl implements ControllerService {
         try {
             return dictionaryService.readAndCreateMap(dictionaryFileName);
         } catch (IOException e) {
-            myLogger.error("Failed to process dictionary file: " + dictionaryFileName + " with error message: " + e.getMessage(), e);
+            LOGGER.error("Failed to process dictionary file: {} with error message: {}", dictionaryFileName, e.getMessage(), e);
         }
         return null;
     }

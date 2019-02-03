@@ -17,14 +17,11 @@ class FileHelperTest {
     private FileHelper fileHelper;
 
     @Mock
-    private MyLogger mockMyLogger;
-
-    @Mock
     private File mockFile;
 
     @BeforeEach
     void setUp() {
-        fileHelper = new FileHelper(mockMyLogger);
+        fileHelper = new FileHelper();
     }
 
     @Test
@@ -33,7 +30,6 @@ class FileHelperTest {
         doReturn(mockFile).when(spyHelper).getFile(anyString());
         when(mockFile.exists()).thenReturn(false);
         boolean result = spyHelper.isCorrectFile("someFile");
-        verify(mockMyLogger).error("The given file: someFile doesn't exist");
         assertFalse(result);
     }
 
@@ -44,7 +40,6 @@ class FileHelperTest {
         when(mockFile.exists()).thenReturn(true);
         when(mockFile.isFile()).thenReturn(false);
         boolean result = spyHelper.isCorrectFile("someFile");
-        verify(mockMyLogger).error("The given file: someFile is not a file");
         assertFalse(result);
     }
 
@@ -56,7 +51,6 @@ class FileHelperTest {
         when(mockFile.isFile()).thenReturn(true);
         when(mockFile.canRead()).thenReturn(false);
         boolean result = spyHelper.isCorrectFile("someFile");
-        verify(mockMyLogger).error("The given file: someFile cannot be read");
         assertFalse(result);
     }
 

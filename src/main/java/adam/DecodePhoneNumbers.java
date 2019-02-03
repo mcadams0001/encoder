@@ -1,13 +1,14 @@
 package adam;
 
 import adam.helper.FileHelper;
-import adam.helper.MyLogger;
 import adam.services.ControllerService;
 import adam.services.ControllerServiceImpl;
 import adam.services.DictionaryServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DecodePhoneNumbers {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(DecodePhoneNumbers.class);
     private ControllerService controllerService;
     private FileHelper fileHelper;
 
@@ -17,14 +18,13 @@ public class DecodePhoneNumbers {
     }
 
     public static void main(String[] args) {
-        MyLogger myLogger = new MyLogger();
         if (args.length < 2) {
-            myLogger.info("Usage: [dictionary file name] [phone numbers file name]");
+            LOGGER.info("Usage: [dictionary file name] [phone numbers file name]");
             return;
         }
         String dictionaryFileName = args[0];
         String phoneNumberFileName = args[1];
-        DecodePhoneNumbers decodePhoneNumbers = new DecodePhoneNumbers(new FileHelper(myLogger), new ControllerServiceImpl(new DictionaryServiceImpl(), myLogger));
+        DecodePhoneNumbers decodePhoneNumbers = new DecodePhoneNumbers(new FileHelper(), new ControllerServiceImpl(new DictionaryServiceImpl()));
         decodePhoneNumbers.processFiles(dictionaryFileName, phoneNumberFileName);
     }
 
